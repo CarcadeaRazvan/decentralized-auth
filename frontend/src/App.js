@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { connectWallet, signNonce } from "./blockchain";
 import { ethers } from "ethers";
 import crypto from "crypto-browserify";
-import CryptoJS from "crypto-js";
 const BN = require("bn.js");
 
 function computeSharedSecret(otherPublicKeyHex, privateKeyHex, primeHex) {
@@ -170,7 +169,6 @@ function App() {
       let decryptedBody = decipher.update(data, "hex", "utf8");
       decryptedBody += decipher.final("utf8");
       const parsedBody = JSON.parse(decryptedBody);
-      console.log(parsedBody);
 
       const { balance } = parsedBody;
       setBalance(balance);
