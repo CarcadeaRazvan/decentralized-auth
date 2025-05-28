@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
-const { secretKey } = require("../config/constants");
+require("dotenv").config();
 
 function generateJWT(payload) {
-  return jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "1h" });
 }
 
 function verifyJWT(token) {
-  return jwt.verify(token, secretKey);
+  return jwt.verify(token, process.env.SECRET_KEY);
 }
 
 module.exports = {

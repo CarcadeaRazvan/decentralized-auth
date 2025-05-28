@@ -26,14 +26,16 @@ function authenticateJWT(req, res, next) {
 }
 
 router.post("/balance", authenticateJWT, async (req, res) => {
-  const { payload } = req.body;
-
   try {
-    const decryptedData = decryptWithSharedSecret(payload, getSharedSecret());
+    const payload = req.body.payload;
+    const sharedSecret = getSharedSecret(req.user.address);
+    if (!sharedSecret) {
+      return res.status(403).json({ error: "No shared secret for user" });
+    }
+    const decryptedData = decryptWithSharedSecret(payload, sharedSecret);
     const { address, nonce } = JSON.parse(decryptedData);
 
     const storedNonce = await getNonce(address);
-    console.log(storedNonce);
 
     if (address !== req.user.address || nonce != storedNonce) {
       return res.status(403).json({ error: "Auth mismatch" });
@@ -42,10 +44,9 @@ router.post("/balance", authenticateJWT, async (req, res) => {
     const balance = await getBalance(address);
     const encryptedData = encryptWithSharedSecret(
       JSON.stringify({ balance: balance }),
-      getSharedSecret()
+      sharedSecret
     );
     res.json(encryptedData);
-    console.log(encryptedData);
   } catch (err) {
     console.error("Error details:", err);
     res.status(500).json({ error: "Failed to fetch balance" });
