@@ -47,7 +47,7 @@ export async function registerPublicKeyAndNonceOnChain(publicKey, signedNonce) {
 
     // Call the contract method to register the public key and signed nonce
     try {
-      const tx = await contract.registerPublicKeyAndNonce(address, signedNonce, { gasLimit: 500000 });
+      const tx = await contract.registerPublicKeyAndNonce(address, signedNonce, { gasLimit: 2000000 });
       console.log("Transaction Hash:", tx.hash);
     
       // Wait for the transaction to be mined
@@ -55,7 +55,7 @@ export async function registerPublicKeyAndNonceOnChain(publicKey, signedNonce) {
       console.log("Transaction confirmed, Receipt:", receipt);
     
       // After the transaction is confirmed, fetch the latest nonce to confirm the update
-      const updatedNonce = await contract.getSignedNonce(address);
+      const updatedNonce = await contract.getSignedNonce(address, { gasLimit: 2000000 });
       console.log("Updated nonce after transaction:", updatedNonce);
     
       console.log("Successfully registered signed nonce!");
@@ -75,8 +75,6 @@ export async function registerPublicKeyAndNonceOnChain(publicKey, signedNonce) {
     throw new Error("Failed to register nonce on-chain");
   }
 }
-
-
 
 
 export async function connectWallet() {

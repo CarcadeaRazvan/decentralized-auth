@@ -26,7 +26,7 @@ async function getPublicKey(address) {
 
 // Get the stored nonce of a user from the blockchain
 async function getNonce(address) {
-  return await contract.getSignedNonce(address);
+  return await contract.getSignedNonce(address, { gasLimit: 500000 });
 }
 
 // Retrieve the stored nonce timestamp for expiration check
