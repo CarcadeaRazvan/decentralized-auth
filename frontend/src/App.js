@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Tooltip,
   Box,
   Card,
   CardContent,
@@ -20,7 +21,11 @@ import { ethers } from "ethers";
 import crypto from "crypto-browserify";
 const BN = require("bn.js");
 
-const steps = ["Connect Wallet", "Request login", "Sign Nonce"];
+const steps = [
+  "Connect Wallet",
+  "Request login",
+  "Sign Nonce and generate Diffie Hellman",
+];
 
 function computeSharedSecret(otherPublicKeyHex, privateKeyHex, primeHex) {
   const prime = new BN(primeHex, 16);
@@ -468,7 +473,7 @@ function App() {
         }}
       >
         <CardContent>
-          <Typography variant="h4" align="center" sx={{ marginBottom: 2 }}>
+          <Typography variant="h4" align="center" sx={{ marginBottom: 4 }}>
             Decentralized Authentication Framework
           </Typography>
           {connected && (
@@ -503,7 +508,20 @@ function App() {
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((label, index) => (
                 <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
+                  <Tooltip
+                    title={
+                      index === 0
+                        ? "In order to proceed with the login process, the user has to connect an active Ethereum account"
+                        : index === 1
+                        ? "The user has to request a nonce from the server in order to validate the ownership of the previously used wallet."
+                        : "The user will generate a Diffie-Hellman key pair, sign the received nonce with its Eth private key, then submit the signed nonce on the blockchain and send back to the server its Diffie Hellman public key."
+                    }
+                    arrow
+                    placement="bottom"
+                    sx={{ fontSize: "1.6" }}
+                  >
+                    <StepLabel>{label}</StepLabel>
+                  </Tooltip>
                 </Step>
               ))}
             </Stepper>
