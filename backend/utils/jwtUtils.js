@@ -2,11 +2,13 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 function generateJWT(payload) {
-  return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "10s" });
+  return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "30s" });
 }
 
 function generateRefreshToken(payload) {
-  return jwt.sign(payload, process.env.SECRET_REFRESH_TOKEN, { expiresIn: "30s" });
+  return jwt.sign(payload, process.env.SECRET_REFRESH_TOKEN, {
+    expiresIn: "5m",
+  });
 }
 
 function verifyJWT(token) {
@@ -21,5 +23,5 @@ module.exports = {
   generateJWT,
   generateRefreshToken,
   verifyJWT,
-  verifyRefreshJWT
+  verifyRefreshJWT,
 };

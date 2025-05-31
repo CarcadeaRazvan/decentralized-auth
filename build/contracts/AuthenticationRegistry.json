@@ -8020,10 +8020,16 @@
       "links": {},
       "address": "0xbdA39d0e242687A764a9070092e6386B56188CcF",
       "transactionHash": "0x638dd8b8860cc329502a27cd45ab496f40b3c38bb3ed159d33fb7268c3c1c3a0"
+    },
+    "1748714583887": {
+      "events": {},
+      "links": {},
+      "address": "0x2B7C40427361efcCeB1D98fBE91A137e5bFF8040",
+      "transactionHash": "0xad60e8060b7bae6f8bdf8ae03eb9080410af05714474f7bab70137a466a32e30"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-28T18:13:44.523Z",
+  "updatedAt": "2025-05-31T18:03:23.934Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

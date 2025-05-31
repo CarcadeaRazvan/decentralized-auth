@@ -1,4 +1,3 @@
 node_modules
-# backend/config/constants.js
 .DS_Store
 .env

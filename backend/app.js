@@ -1,16 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const routes = require("./routes");
-const { deleteExpiredSessions } = require("./utils/sessionManager")
-const cookieParser = require('cookie-parser');
+const { deleteExpiredSessions } = require("./utils/sessionManager");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Only allow requests from the frontend (localhost:3000)
-  credentials: true, // Allow cookies and credentials to be sent
+  origin: "http://localhost:3000",
+  credentials: true,
 };
 
 app.use(cors(corsOptions));

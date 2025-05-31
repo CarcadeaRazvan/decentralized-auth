@@ -2,7 +2,10 @@ const path = require("path");
 const fs = require("fs");
 const { ethers } = require("ethers");
 
-const CONTRACT_PATH = path.resolve(__dirname, "../../build/contracts/AuthenticationRegistry.json");
+const CONTRACT_PATH = path.resolve(
+  __dirname,
+  "../../build/contracts/AuthenticationRegistry.json"
+);
 const artifact = JSON.parse(fs.readFileSync(CONTRACT_PATH));
 
 const latestNetworkId = Object.keys(artifact.networks).sort((a, b) => b - a)[0];
@@ -15,5 +18,5 @@ module.exports = {
   artifact,
   contractAddress,
   abi,
-  provider
-}
+  provider,
+};

@@ -1,4 +1,3 @@
-// frontend/src/config/constants.js
 import artifact from "../artifacts/AuthenticationRegistry.json";
 
 const networkId = Object.keys(artifact.networks).sort((a, b) => b - a)[0];
