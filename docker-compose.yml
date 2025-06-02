@@ -1,0 +1,85 @@
+services:
+  ganache:
+    image: trufflesuite/ganache
+    container_name: ganache
+    platform: linux/arm64/v8
+    ports:
+      - "8545:8545"
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+  truffle:
+    image: node:23-alpine
+    platform: linux/arm64/v8
+    container_name: truffle
+    working_dir: /home/app
+    command: sh -c "apk add --no-cache python3 make g++ && npm install -g truffle && truffle migrate --verbose"
+    depends_on:
+      - ganache
+    volumes:
+      - ./contracts:/home/app/contracts
+      - ./migrations:/home/app/migrations
+      - ./truffle-config.js:/home/app/truffle-config.js
+      - truffle_build:/home/app/build
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      truffle:
+        condition: service_completed_successfully
+    networks:
+      - app_network
+    command: "npm run start"
+    volumes:
+      - truffle_build:/home/build
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - app_network
+    command: "npm run start"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000"]
+      interval: 30s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+volumes:
+  ganache_data:
+  truffle_build:
+
+networks:
+  app_network:
+    driver: bridge

@@ -19,6 +19,8 @@ import {
 } from "./blockchain";
 import { ethers } from "ethers";
 import crypto from "crypto-browserify";
+import { Buffer } from "./buffer";
+
 const BN = require("bn.js");
 
 const steps = [
