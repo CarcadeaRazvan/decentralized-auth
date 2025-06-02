@@ -1,3 +1,6 @@
+// require("global-agent/bootstrap");
+// process.env.GLOBAL_AGENT_HTTP_PROXY = "http://host.docker.internal:8080";
+
 const express = require("express");
 const cors = require("cors");
 const routes = require("./routes");

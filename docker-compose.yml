@@ -48,6 +48,10 @@ services:
     networks:
       - app_network
     command: "npm run start"
+    # environment:
+    #   - HTTP_PROXY=http://host.docker.internal:8080
+    #   - HTTPS_PROXY=http://host.docker.internal:8080
+    #   - NODE_TLS_REJECT_UNAUTHORIZED=0
     volumes:
       - truffle_build:/home/build
     healthcheck:
@@ -69,6 +73,10 @@ services:
     networks:
       - app_network
     command: "npm run start"
+    # environment:
+    #   - HTTP_PROXY=http://host.docker.internal:8080
+    #   - HTTPS_PROXY=http://host.docker.internal:8080
+    #   - NODE_TLS_REJECT_UNAUTHORIZED=0
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4000"]
       interval: 30s

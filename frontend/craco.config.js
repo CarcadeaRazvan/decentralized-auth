@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const HttpProxyAgent = require("http-proxy-agent");
 
 module.exports = {
   webpack: {
@@ -44,6 +45,48 @@ module.exports = {
       return config;
     },
   },
+
+  devServer: {
+    proxy: {
+      "/nonce": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+        agent: new HttpProxyAgent("http://host.docker.internal:8080"),
+      },
+      "/verify": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+        agent: new HttpProxyAgent("http://host.docker.internal:8080"),
+      },
+      "/store-data": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+        agent: new HttpProxyAgent("http://host.docker.internal:8080"),
+      },
+      "/fetch-data": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+        agent: new HttpProxyAgent("http://host.docker.internal:8080"),
+      },
+      "/logout": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+        agent: new HttpProxyAgent("http://host.docker.internal:8080"),
+      },
+      "/refresh": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+        secure: false,
+        agent: new HttpProxyAgent("http://host.docker.internal:8080"),
+      },
+    },
+  },
+  historyApiFallback: true,
 };
 
 const findWebpackPlugin = (webpackConfig, pluginName) =>

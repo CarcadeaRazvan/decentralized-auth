@@ -75,7 +75,7 @@ function App() {
 
   async function disconnectWallet() {
     try {
-      const response = await fetch("http://localhost:4000/logout", {
+      const response = await fetch("/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -223,7 +223,7 @@ function App() {
 
   async function requestNonce() {
     try {
-      const response = await fetch("http://localhost:4000/nonce", {
+      const response = await fetch("/nonce", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ address }),
@@ -259,7 +259,7 @@ function App() {
       );
       await registerPublicKeyAndNonceOnChain(userPublicKey, signedNonce);
 
-      const backendResponse = await fetch("http://localhost:4000/verify", {
+      const backendResponse = await fetch("/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -343,7 +343,7 @@ function App() {
         return;
       }
 
-      const response = await fetch("http://localhost:4000/store-data", {
+      const response = await fetch("/store-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -379,7 +379,7 @@ function App() {
         return;
       }
 
-      const response = await fetch("http://localhost:4000/fetch-data", {
+      const response = await fetch("/fetch-data", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -413,7 +413,7 @@ function App() {
 
   async function refreshToken() {
     try {
-      const response = await fetch("http://localhost:4000/refresh", {
+      const response = await fetch("/refresh", {
         method: "GET",
         headers: {
           "user-address": address,
