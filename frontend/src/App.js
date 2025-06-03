@@ -17,6 +17,10 @@ import {
   signNonce,
   registerPublicKeyAndNonceOnChain,
 } from "./blockchain";
+import {
+  encryptWithSharedSecret,
+  decryptWithSharedSecret,
+} from "./cryptoUtils";
 import { ethers } from "ethers";
 import crypto from "crypto-browserify";
 import { Buffer } from "./buffer";
@@ -265,7 +269,7 @@ function App() {
         body: JSON.stringify({
           address,
           nonce,
-          signature: signedNonce,
+          // signature: signedNonce,
           userPublicKey,
         }),
       });
@@ -343,13 +347,15 @@ function App() {
         return;
       }
 
+      const encryptedText = encryptWithSharedSecret(customText, sharedSecret);
+
       const response = await fetch("/store-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "User-Address": address,
         },
-        body: JSON.stringify({ customText }),
+        body: JSON.stringify({ encryptedText }),
         credentials: "include",
       });
 
@@ -365,7 +371,11 @@ function App() {
       }
 
       const data = await response.json();
-      alert(data.message);
+      const decryptedMessage = decryptWithSharedSecret(
+        data.encryptedMessage,
+        sharedSecret
+      );
+      alert(decryptedMessage);
     } catch (error) {
       console.error("Error storing data:", error);
       alert("Error storing data");
@@ -401,7 +411,13 @@ function App() {
 
       const data = await response.json();
       if (response.ok) {
-        setStoredData(data.data);
+        const decryptedText = decryptWithSharedSecret(data.data, sharedSecret);
+        setStoredData(decryptedText);
+        const decryptedMessage = decryptWithSharedSecret(
+          data.encryptedMessage,
+          sharedSecret
+        );
+        alert(decryptedMessage);
       } else {
         alert(data.error);
       }

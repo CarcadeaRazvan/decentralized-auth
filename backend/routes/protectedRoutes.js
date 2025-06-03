@@ -4,6 +4,7 @@ const { getSharedSecret } = require("../utils/sessionManager");
 const router = express.Router();
 const crypto = require("crypto");
 const { verifyJWT } = require("../utils/jwtUtils");
+const { encryptWithSharedSecret } = require("../utils/cryptoUtils");
 const {
   deleteSession,
   deleteRefreshToken,
@@ -51,15 +52,25 @@ function authenticateJWT(req, res, next) {
 
 router.post("/store-data", authenticateJWT, async (req, res) => {
   const { address } = req.user;
-  const { customText } = req.body;
+  const { encryptedText } = req.body;
 
-  if (!customText) {
-    return res.status(400).json({ message: "Text is required" });
+  if (
+    !encryptedText ||
+    !encryptedText.ciphertext ||
+    !encryptedText.iv ||
+    !encryptedText.authTag
+  ) {
+    return res.status(400).json({ message: "Invalid encrypted text" });
   }
 
-  clientData.set(address, customText);
+  clientData.set(address, encryptedText);
 
-  return res.status(200).json({ message: "Data saved successfully" });
+  const encryptedMessage = encryptWithSharedSecret(
+    "Data saved successfully",
+    getSharedSecret(address)
+  );
+
+  return res.status(200).json({ encryptedMessage });
 });
 
 router.get("/fetch-data", authenticateJWT, async (req, res) => {
@@ -70,7 +81,12 @@ router.get("/fetch-data", authenticateJWT, async (req, res) => {
     return res.status(404).json({ error: "No data found for this user" });
   }
 
-  return res.status(200).json({ message: "Fetched data", data });
+  const encryptedMessage = encryptWithSharedSecret(
+    "Data fetched successfully",
+    getSharedSecret(address)
+  );
+
+  return res.status(200).json({ encryptedMessage, data });
 });
 
 router.post("/logout", authenticateJWT, async (req, res) => {

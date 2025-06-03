@@ -42,11 +42,11 @@ router.post("/nonce", async (req, res) => {
 router.post("/verify", async (req, res) => {
   const { address, nonce, signature, userPublicKey } = req.body;
   const storedNonce = await getNonce(address);
-  if (storedNonce !== signature) {
-    console.log("Invalid nonce");
-    return res.status(400).json({ error: "Invalid nonce" });
-  }
-  const recoveredAddress = verifyMessage(nonce, signature);
+  // if (storedNonce !== signature) {
+  //   console.log("Invalid nonce");
+  //   return res.status(400).json({ error: "Invalid nonce" });
+  // }
+  const recoveredAddress = verifyMessage(nonce, storedNonce);
   if (recoveredAddress.toLowerCase() !== address.toLowerCase())
     return res.status(401).json({ error: "Invalid signature" });
   let session;
